@@ -15,6 +15,8 @@ def create_app(config_class=Config):
     
     
     # Register blueprints
+    from app.balance import balance as balance_bp
+    app.register_blueprint(balance_bp, url_prefix='/balance')
     
     
     @app.route('/test/')
