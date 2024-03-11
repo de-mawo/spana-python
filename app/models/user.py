@@ -2,6 +2,7 @@
 
 import enum
 from app.extensions import db
+from app.models import TimeStampIDMixin
 
 
 class UserType(enum.Enum):
@@ -12,11 +13,11 @@ class UserType(enum.Enum):
     MODERATOR = "MODERATOR"
 
 
-class User(db.Model):
+class User(TimeStampIDMixin, db.Model):
     """Class for defining User Table columns"""
 
     __tablename__ = "user"
-    id = db.Column(db.Uuid(), primary_key=True, unique=True, nullable=False)
+
     name = db.Column(db.String())
     email = db.Column(db.String(100), unique=True)
     image = db.Column(db.String())
@@ -25,6 +26,8 @@ class User(db.Model):
     manager = db.Column(db.String())
     department = db.Column(db.String())
     role = db.Column(db.String(100), default=UserType.USER)
+    balances = db.relationship('Balance', backref='userId', lazy=True)
+    leaves = db.relationship('Leave', backref='userId', lazy=True)
 
     def __rep__(self):
         return f'<User "{self.name}"'

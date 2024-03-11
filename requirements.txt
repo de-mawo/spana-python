@@ -4,3 +4,5 @@ flask-sqlalchemy
 Flask-Migrate
 flask_validator
 psycopg2-binary
+flask-session
+redis
