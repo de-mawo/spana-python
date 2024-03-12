@@ -3,7 +3,9 @@
 from flask import Flask
 
 from config import Config
-from app.extensions import db, migrate, sess
+from app.extensions import db
+from app.extensions import migrate
+from app.extensions import sess
 
 
 def create_app(config_class=Config):

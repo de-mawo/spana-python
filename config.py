@@ -23,4 +23,4 @@ class Config:
     # Flask-Session
     REDIS_URI = environ.get("REDIS_URI")
     SESSION_TYPE = "redis"
-    SESSION_REDIS = redis.from_url(environ.get("SESSION_REDIS"))
+    SESSION_REDIS = redis.from_url(environ.get("REDIS_URI"))
