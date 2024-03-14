@@ -1,10 +1,12 @@
 version: '3.8'
 
 services:
-  spanaflask:
-    build: 
+  app:
+    build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - ./.env
     depends_on:
       db:
         condition: service_healthy
@@ -12,6 +14,8 @@ services:
       - ./:/usr/src/web
     ports:
       - "8000:5000"
+    networks:
+      - spana-network
   db:
     image: postgres:16
     container_name: spanaflask-db
@@ -19,11 +23,17 @@ services:
     env_file:
       - ./.env
     volumes:
-      - ./postgresData:/var/lib/postgresql/data
+      - postgresData:/var/lib/postgresql/data
     ports:
       - "5123:5432"
+    networks:
+      - spana-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres-U $${POSTGRES_USER} -d $${POSTGRES_DB} -t 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres-U $${POSTGRES_USER} -d $${POSTGRES_DB} -t 1"
+        ]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -35,8 +45,14 @@ services:
       - "6380:6379"
     volumes:
       - redisData:/data
+    networks:
+      - spana-network
 
 volumes:
   postgresData:
   redisData:
 
+
+networks:
+  spana-network:
+    driver: bridge

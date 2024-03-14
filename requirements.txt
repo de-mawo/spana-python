@@ -1,6 +1,6 @@
-flask
+flask==2.3.3
 python-dotenv
-flask-sqlalchemy
+flask-sqlalchemy==3.0.5
 Flask-Migrate
 flask_validator
 psycopg2-binary
