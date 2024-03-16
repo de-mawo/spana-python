@@ -1,8 +1,12 @@
 """Balance Model"""
 
+from sqlalchemy import inspect
 from app.extensions import db
 from app.constants import STRING_YEAR
 from app.models import TimeStampIDMixin
+from app.models import (
+    user,
+)  # to solve NoReferencedTableError: Foreign key associated with column … could not find table
 
 
 class Balance(TimeStampIDMixin, db.Model):
@@ -32,7 +36,11 @@ class Balance(TimeStampIDMixin, db.Model):
     paternityUsed = db.Column(db.Integer(), default=0)
     paternityAvailable = db.Column(db.Integer(), default=0)
     unpaidAvailable = db.Column(db.Integer(), default=0)
-    userId = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    userId = db.Column(db.Uuid(), db.ForeignKey("user.id"))
+
+    def toDict(self):
+        return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
+
 
     def __repr__(self):
         return f'<Balance "{self.email}">'

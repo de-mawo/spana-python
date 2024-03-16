@@ -3,6 +3,7 @@
 import enum
 from app.extensions import db
 from app.models import TimeStampIDMixin
+from app.models import leave 
 
 
 class UserType(enum.Enum):
@@ -26,8 +27,8 @@ class User(TimeStampIDMixin, db.Model):
     manager = db.Column(db.String())
     department = db.Column(db.String())
     role = db.Column(db.String(100), default=UserType.USER)
-    balances = db.relationship('Balance', backref='userId', lazy=True)
-    leaves = db.relationship('Leave', backref='userId', lazy=True)
+    balances = db.relationship('Balance', backref='balance', lazy=True)  
+    leaves = db.relationship('Leave', backref='leave', lazy=True)
 
     def __rep__(self):
         return f'<User "{self.name}"'

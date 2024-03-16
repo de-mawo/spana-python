@@ -2,13 +2,14 @@
 
 import os
 import json
-from flask import jsonify
-from app.balance import balance
+from flask import jsonify, request as req
+from . import balance
+from .controller import createBalance, getAllBalances
 
 
-@balance.route("/")
+
+@balance.route("/", methods=['GET','POST'])
 def index():
-    json_path = os.path.join(os.path.dirname(__file__), "balances.json")
-    with open(json_path) as file:
-        data = json.load(file)
-    return jsonify(data)
+    if req.method == 'GET': return getAllBalances()
+    if req.method == 'POST': return createBalance()
+

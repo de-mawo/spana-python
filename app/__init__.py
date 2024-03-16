@@ -21,9 +21,15 @@ def create_app(config_class=Config):
     sess.init_app(app)
 
     # Register blueprints
+    from app.user import user as user_bp
+    from app.leave import leave as leave_bp
     from app.balance import balance as balance_bp
+    from app.events import events as events_bp
 
+    app.register_blueprint(user_bp, url_prefix="/user")
+    app.register_blueprint(leave_bp, url_prefix="/leave")
     app.register_blueprint(balance_bp, url_prefix="/balance")
+    app.register_blueprint(events_bp, url_prefix="/events")
 
     @app.route("/test/")
     def test_page():

@@ -4,7 +4,8 @@ import enum
 from app.extensions import db
 from app.constants import STRING_YEAR
 from app.models import TimeStampIDMixin
-
+from app.models import user 
+ 
 
 class LeaveType(enum.Enum):
     """Leave Enum type definition"""
@@ -20,11 +21,11 @@ class Leave(TimeStampIDMixin, db.Model):
 
     __tablename__ = "leave"
 
-    leave_type = db.Column(db.String())
+    leaveType = db.Column(db.String())
     year = db.Column(db.String(), default=STRING_YEAR)
-    start_date = db.Column(db.DateTime(timezone=True), nullable=False)
-    end_date = db.Column(db.DateTime(timezone=True), nullable=False)
-    days = db.Column(db.Integer(2), nullable=False)
+    startDate = db.Column(db.DateTime(timezone=True), nullable=False)
+    endDate = db.Column(db.DateTime(timezone=True), nullable=False)
+    days = db.Column(db.Integer(), nullable=False)
     name = db.Column(db.String(), nullable=False)
     note = db.Column(db.Text())
     link = db.Column(db.String(), nullable=False)
@@ -32,7 +33,8 @@ class Leave(TimeStampIDMixin, db.Model):
     moderator = db.Column(db.String())
     moderatorNote = db.Column(db.String())
     status = db.Column(db.String(), default=LeaveType.PENDING)
-    userId = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    userId = db.Column(db.Uuid(), db.ForeignKey("user.id"))
+    
 
     def __repr__(self):
-        return f'<Leave "{self.name}"'
+        return f'<Leave "{self.leaveType}"'
