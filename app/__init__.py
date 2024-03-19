@@ -22,11 +22,13 @@ def create_app(config_class=Config):
 
     # Register blueprints
     from app.user import user as user_bp
+    from app.auth import auth as auth_bp
     from app.leave import leave as leave_bp
     from app.balance import balance as balance_bp
     from app.events import events as events_bp
 
     app.register_blueprint(user_bp, url_prefix="/user")
+    app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(leave_bp, url_prefix="/leave")
     app.register_blueprint(balance_bp, url_prefix="/balance")
     app.register_blueprint(events_bp, url_prefix="/events")

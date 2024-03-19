@@ -38,6 +38,7 @@ class Balance(TimeStampIDMixin, db.Model):
     unpaidAvailable = db.Column(db.Integer(), default=0)
     userId = db.Column(db.Uuid(), db.ForeignKey("user.id"))
 
+    # serialize SqlAlchemy PostgreSQL Query to JSON
     def toDict(self):
         return { c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs }
 
