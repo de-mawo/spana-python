@@ -36,8 +36,8 @@ flask db upgrade
 flask run
 
 #### To Run the Server with specific host and port
-# flask run -h HOSTNAME -p PORTNUMBER
-flask run -h 127.0.0.2 -p 5001
+- flask run -h HOSTNAME -p PORTNUMBER
+- flask run -h 127.0.0.2 -p 5001
 
 #### To Run the Server with Automatic Restart When Changes Occur
 FLASK_DEBUG=1 flask run

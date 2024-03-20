@@ -34,19 +34,8 @@ class Config:
             'token_url': 'https://accounts.google.com/o/oauth2/token',
             'userinfo': {
                 'url': 'https://www.googleapis.com/oauth2/v3/userinfo',
-                'email': lambda json: json['email'],
             },
-            'scopes': ['https://www.googleapis.com/auth/userinfo.email'],
+            'scopes': ['email','profile'],
         },
-        # 'github': {
-        #     'client_id': environ.get('GITHUB_CLIENT_ID'),
-        #     'client_secret': environ.get('GITHUB_CLIENT_SECRET'),
-        #     'authorize_url': 'https://github.com/login/oauth/authorize',
-        #     'token_url': 'https://github.com/login/oauth/access_token',
-        #     'userinfo': {
-        #         'url': 'https://api.github.com/user/emails',
-        #         'email': lambda json: json[0]['email'],
-        #     },
-        #     'scopes': ['user:email'],
-        # },
+      
     }
