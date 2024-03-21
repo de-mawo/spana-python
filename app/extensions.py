@@ -7,4 +7,4 @@ from flask_session import Session
 
 migrate = Migrate()
 db = SQLAlchemy()
-sess = Session()
+server_session = Session()

@@ -1,11 +1,14 @@
 """Auth API routes"""
 
+import uuid
+import requests
 from flask import redirect, current_app, session, abort, url_for, request as req
 from flask_login import login_user
 from . import auth
 import secrets
 from urllib.parse import urlencode, parse_qs
-import requests
+from app.models.user import User
+from app.extensions import db
 
 
 @auth.route("/authorize/<provider>")
@@ -20,7 +23,9 @@ def oauth2Auth(provider):
     queryString = urlencode(
         {
             "client_id": data["client_id"],
-            "redirect_uri": "http://localhost:5000/auth/google/callback",
+            "redirect_uri": url_for(
+                "auth.oauth2Callback", provider=provider, _external=True
+            ),
             "response_type": "code",
             "scope": " ".join(data["scopes"]),
             "state": session["oauth2_state"],
@@ -31,9 +36,9 @@ def oauth2Auth(provider):
     return redirect(data["authorize_url"] + "?" + queryString)
 
 
-@auth.route("/google/callback")
-def oauth2Callback():
-    data = current_app.config["OAUTH2_PROVIDERS"].get("google")
+@auth.route("/callback/<provider>")
+def oauth2Callback(provider):
+    data = current_app.config["OAUTH2_PROVIDERS"].get(provider)
 
     if data is None:
         abort(404)
@@ -63,7 +68,9 @@ def oauth2Callback():
             "client_secret": data["client_secret"],
             "code": req.args["code"],
             "grant_type": "authorization_code",
-            "redirect_uri": "http://localhost:5000/auth/google/callback",
+            "redirect_uri": url_for(
+                "auth.oauth2Callback", provider=provider, _external=True
+            ),
         },
         headers={"Accept": "application/json"},
     )
@@ -83,7 +90,7 @@ def oauth2Callback():
     )
     if response.status_code != 200:
         abort(401)
-
+    # This is the values from Google , check the documentation from other providers
     name, picture, email = (
         response.json().get("name"),
         response.json().get("picture"),
@@ -91,7 +98,20 @@ def oauth2Callback():
     )
 
     # find or create the user in the database
+    user = User.query.filter_by(email=email).first()
 
+    if user is None:
+        # Create a new user if not exists
+        id = str(uuid.uuid4())
+        new_user = User(id=id, name=name, email=email, image=picture)
+        db.session.add(new_user)
+        db.session.commit()
+        session["user_id"] = new_user.id
+    else:
+        # Use the existing user's id
+        session["user_id"] = user.id
     # log the user in
 
-    return redirect("http://localhost:3000/")
+    clientUrl = current_app.config["CLIENT_URL"]
+
+    return redirect(clientUrl)

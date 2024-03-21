@@ -18,3 +18,4 @@
 #### Please edit configuration/connection/logging settings in '.../migrations/alembic.ini' before proceeding.
 - just do flask db migrate
 
+ 

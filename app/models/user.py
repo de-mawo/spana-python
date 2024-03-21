@@ -1,6 +1,7 @@
 """User Model"""
 
 import enum
+from sqlalchemy import Enum
 from app.extensions import db
 from app.models import TimeStampIDMixin
 from app.models import leave 
@@ -26,7 +27,7 @@ class User(TimeStampIDMixin, db.Model):
     title = db.Column(db.String())
     manager = db.Column(db.String())
     department = db.Column(db.String())
-    role = db.Column(db.String(100), default=UserType.USER)
+    role = db.Column(db.Enum(UserType), default=UserType.USER)
     balances = db.relationship('Balance', backref='balance', lazy=True)  
     leaves = db.relationship('Leave', backref='leave', lazy=True)
 
