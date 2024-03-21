@@ -2,8 +2,15 @@
 
 import uuid
 import requests
-from flask import redirect, current_app, session, abort, url_for, request as req
-from flask_login import login_user
+from flask import (
+    redirect,
+    current_app,
+    session,
+    abort,
+    url_for,
+    request as req,
+    jsonify,
+)
 from . import auth
 import secrets
 from urllib.parse import urlencode, parse_qs
@@ -115,3 +122,35 @@ def oauth2Callback(provider):
     clientUrl = current_app.config["CLIENT_URL"]
 
     return redirect(clientUrl)
+
+
+@auth.route("/getMe")
+def getCurrentUser():
+    if "user_id" in session:
+        user_id = session["user_id"]
+
+        # Fetch user details from database using user_id
+        user = User.query.get(user_id)
+        # Only send minimal fields for a logged in user
+        if user:
+            return {
+                # "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "image": user.image,
+                "role": user.role.value,
+                # "phone": user.phone,
+                # "title": user.title,
+                # "manager": user.manager,
+                # "department": user.department,
+            }
+        else:
+            return jsonify({"error": "User not found"}), 404  # Not Found
+    else:
+        return jsonify({"error": "User not logged in"}), 401  # Unauthorized
+
+
+@auth.route("/logout", methods=["POST"])
+def logout_user():
+    session.pop("user_id")
+    return jsonify({"success": "Logged Out"}), 201

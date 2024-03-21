@@ -1,12 +1,14 @@
 """Balances Controllers """
 
-from flask import request as req, jsonify
 import uuid
+from flask import request as req, jsonify
 from app.models.balance import Balance
 from app.extensions import db
+from app.auth.util import isAdmin
 
-
+@isAdmin
 def getAllBalances():
+    """Func to get all Admin Balances"""
     balances = Balance.query.all()
     res = []
     for balance in balances:
@@ -15,6 +17,7 @@ def getAllBalances():
 
 
 def createBalance():
+    """Create Function for the Admin to create a Balance"""
     if not req.json:
         return "Content Type not accepted"
 
