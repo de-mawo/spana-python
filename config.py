@@ -26,6 +26,9 @@ class Config:
     SESSION_REDIS = redis.from_url(environ.get("REDIS_URI"))
     # https://learningwithcode.com/flask-session-sqlalchemy-redis-python
     SESSION_PERMANENT = False
+    SESSION_USE_SIGNER = True
+    
+    
     CLIENT_URL = environ.get("CLIENT_URL")
     # OAuth2 Providers
     OAUTH2_PROVIDERS = {

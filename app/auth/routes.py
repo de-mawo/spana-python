@@ -124,7 +124,7 @@ def oauth2Callback(provider):
     return redirect(clientUrl)
 
 
-@auth.route("/getMe")
+@auth.route("/session", methods=['GET'])
 def getCurrentUser():
     if "user_id" in session:
         user_id = session["user_id"]
@@ -133,17 +133,13 @@ def getCurrentUser():
         user = User.query.get(user_id)
         # Only send minimal fields for a logged in user
         if user:
-            return {
-                # "id": user.id,
+            user_data = {
                 "name": user.name,
                 "email": user.email,
                 "image": user.image,
-                "role": user.role.value,
-                # "phone": user.phone,
-                # "title": user.title,
-                # "manager": user.manager,
-                # "department": user.department,
+                "role": user.role.value
             }
+            return jsonify(user_data), 200
         else:
             return jsonify({"error": "User not found"}), 404  # Not Found
     else:
