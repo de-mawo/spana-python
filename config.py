@@ -27,6 +27,8 @@ class Config:
     # https://learningwithcode.com/flask-session-sqlalchemy-redis-python
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
+    SESSION_COOKIE_NAME = "spana_py_session"
+    SESSION_COOKIE_SAMESITE = 'Lax'
     
     
     CLIENT_URL = environ.get("CLIENT_URL")

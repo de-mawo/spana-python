@@ -22,7 +22,7 @@ def create_app(config_class=Config):
 
     cors.init_app(
         app,
-        resources={r"/api/*": {"origins": [app.config["CLIENT_URL"]]}},
+        # resources={r"/api/*": {"origins": [app.config["CLIENT_URL"]]}},
         supports_credentials=True,
     )
 
@@ -33,8 +33,8 @@ def create_app(config_class=Config):
     from app.balance import balance as balance_bp
     from app.events import events as events_bp
 
-    app.register_blueprint(user_bp, url_prefix="/api/v1/user")
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(user_bp, url_prefix="/api/v1/user")
     app.register_blueprint(leave_bp, url_prefix="/api/v1/leave")
     app.register_blueprint(balance_bp, url_prefix="/api/v1/balance")
     app.register_blueprint(events_bp, url_prefix="/api/v1/events")

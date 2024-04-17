@@ -118,7 +118,7 @@ def oauth2Callback(provider):
         # Use the existing user's id
         session["user_id"] = user.id
     # log the user in
-
+    # print('Im logged in',session)
     clientUrl = current_app.config["CLIENT_URL"]
 
     return redirect(clientUrl)
@@ -146,7 +146,9 @@ def getCurrentUser():
         return jsonify({"error": "User not logged in"}), 401  # Unauthorized
 
 
-@auth.route("/logout", methods=["POST"])
+@auth.route("/logout", methods=["POST", "OPTIONS"])
 def logout_user():
-    session.pop("user_id")
+    # print(req)
+    session.pop("user_id", None)
+    session.clear()
     return jsonify({"success": "Logged Out"}), 201

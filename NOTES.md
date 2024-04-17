@@ -1,4 +1,5 @@
 
+# Errors and Possible solutions 
 
 #### Can't locate revision identified by '...' when migrating using Flask-Migrate
 - flask db revision --rev-id e39d16e62810  
